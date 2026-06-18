@@ -1,3 +1,4 @@
+# cast() is a no-op at runtime; it only tells mypy the concrete type of SQLAlchemy's Any-typed results
 from typing import Annotated, Any, cast
 from fastapi import FastAPI, Request, HTTPException, status, Depends
 from fastapi.exceptions import RequestValidationError
