@@ -23,8 +23,9 @@ class User(Base):
     )  # decouple the db from the file structures. Separates data from presentation.
 
     # forward reference
+    # TODO: to support anonymize strategy on user delete, remove cascade and make Post.user_id nullable with ondelete="SET NULL"
     posts: Mapped[list[Post]] = relationship(
-        back_populates="author"
+        back_populates="author", cascade="all, delete-orphan"
     )  # 1:many relation, allows us to do users.posts to get all posts
 
     @property
