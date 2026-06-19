@@ -8,3 +8,5 @@ wheels/
 blog.db
 # Virtual environments
 .venv
+uv.lock
+notes/
