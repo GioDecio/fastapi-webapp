@@ -24,7 +24,7 @@ strict = true
 plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]
-module = "main"
+module = ["main", "routers", "routers.*"]
 ignore_errors = true
 
 [tool.commitizen]
