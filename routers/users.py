@@ -61,6 +61,16 @@ async def get_user(user_id: int, db: Annotated[AsyncSession, Depends(get_db)]):
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
 
+# get_users
+@router.get("", response_model=list[UserResponse])
+async def get_users(db: Annotated[AsyncSession, Depends(get_db)]):
+    result = await db.execute(
+        select(models.User),
+    )
+    users = result.scalars().all()
+    return users
+
+
 ## get_user_posts
 @router.get("/{user_id}/posts", response_model=list[PostResponse])
 async def get_user_posts(user_id: int, db: Annotated[AsyncSession, Depends(get_db)]):
