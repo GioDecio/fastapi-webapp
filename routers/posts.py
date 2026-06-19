@@ -15,7 +15,9 @@ router = APIRouter()
 
 # Single api endpoint for posts
 ## get_posts
-@router.get("", response_model=list[PostResponse])
+@router.get(
+    "", response_model=list[PostResponse], summary="Get any posts, regardless the users"
+)
 async def get_posts(db: Annotated[AsyncSession, Depends(get_db)]):
     result = await db.execute(
         select(models.Post).options(selectinload(models.Post.author)),
