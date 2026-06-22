@@ -60,3 +60,24 @@ async def user_posts_page(
         "user_posts.html",
         {"posts": posts, "user": user, "title": f"{user.username}'s Posts"},
     )
+
+
+## login and register template_routes
+@router.get(
+    "/login", include_in_schema=False
+)  # include_in_schema=False because these are not API endpoints
+async def login_page(request: Request):
+    return templates.TemplateResponse(
+        request,
+        "login.html",
+        {"title": "Login"},
+    )
+
+
+@router.get("/register", include_in_schema=False)
+async def register_page(request: Request):
+    return templates.TemplateResponse(
+        request,
+        "register.html",
+        {"title": "Register"},
+    )
