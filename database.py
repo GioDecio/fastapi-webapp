@@ -20,7 +20,7 @@ AsyncSessionLocal = async_sessionmaker(
 # autocommit=False, autoflush=False: controls when changes are commited
 
 
-class Base(DeclarativeBase):  # type: ignore[misc]
+class Base(DeclarativeBase):
     pass
 
 

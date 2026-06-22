@@ -1,9 +1,9 @@
 # Here is agreed what is exposed in the api
 
-from typing import Optional
 from datetime import datetime
+from typing import Optional
 
-from pydantic import BaseModel, ConfigDict, Field, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 
 class UserBase(BaseModel):
@@ -45,7 +45,7 @@ class PostBase(BaseModel):
 
 
 class PostCreate(PostBase):
-    user_id: int  # TEMPORARY
+    pass
 
 
 class PostUpdate(BaseModel):

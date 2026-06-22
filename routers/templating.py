@@ -1,9 +1,11 @@
 from typing import Annotated, Any
-from fastapi import APIRouter, Request, HTTPException, status, Depends
+
+from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi.templating import Jinja2Templates
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
-from fastapi.templating import Jinja2Templates
+
 import models
 from database import get_db
 
@@ -80,4 +82,13 @@ async def register_page(request: Request):
         request,
         "register.html",
         {"title": "Register"},
+    )
+
+
+@router.get("/account", include_in_schema=False)
+async def account_page(request: Request):
+    return templates.TemplateResponse(
+        request,
+        "account.html",
+        {"title": "Account"},
     )

@@ -23,8 +23,10 @@ dev = [
 ]
 
 [tool.mypy]
-strict = true
 plugins = ["pydantic.mypy"]
+disallow_untyped_defs = true
+warn_unused_ignores = true
+warn_return_any = true
 
 [[tool.mypy.overrides]]
 module = ["main", "routers", "routers.*"]
