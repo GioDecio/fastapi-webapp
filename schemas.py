@@ -12,20 +12,31 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    pass
+    password: str = Field(min_length=8)
 
 
-class UserResponse(UserBase):
+class UserPublic(BaseModel):
     model_config = ConfigDict(from_attributes=True)
+
     id: int
+    username: str
     image_file: str | None
     image_path: str
+
+
+class UserPrivate(UserPublic):
+    email: EmailStr
 
 
 class UserUpdate(BaseModel):
     username: str | None = Field(default=None, min_length=1, max_length=50)
     email: EmailStr | None = Field(default=None, max_length=120)
     image_file: str | None = Field(default=None, min_length=1, max_length=200)
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
 
 
 class PostBase(BaseModel):
@@ -51,4 +62,4 @@ class PostResponse(PostBase):
     # TODO: make user_id and author optional (int | None, UserResponse | None) when anonymize delete strategy is implemented
     user_id: int
     date_posted: datetime  # This will be serialised to standard ISO 8601 format
-    author: UserResponse  # This gets nested json
+    author: UserPublic  # This gets nested json
