@@ -10,3 +10,4 @@ blog.db
 .venv
 uv.lock
 notes/
+media/
