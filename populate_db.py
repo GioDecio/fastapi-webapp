@@ -241,8 +241,15 @@ async def clear_existing_data() -> None:
                 file.unlink()
         print(f"Deleted profile pictures from {PROFILE_PICS_DIR}")
 
+    # Ensure all tables exist before clearing
+    from database import Base
+
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
     # Clear database tables (order respects foreign keys)
     async with AsyncSessionLocal() as db:
+        await db.execute(delete(models.PasswordResetToken))
         await db.execute(delete(models.Post))
         await db.execute(delete(models.User))
         await db.commit()
