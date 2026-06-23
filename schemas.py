@@ -62,3 +62,11 @@ class PostResponse(PostBase):
     user_id: int
     date_posted: datetime  # This will be serialised to standard ISO 8601 format
     author: UserPublic  # This gets nested json
+
+
+class PaginatedPostsResponse(BaseModel):
+    posts: list[PostResponse]
+    total: int
+    skip: int
+    limit: int
+    has_more: bool  # simply frontend code, no need to calculate, client get right info from API
