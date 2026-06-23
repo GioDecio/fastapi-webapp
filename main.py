@@ -1,23 +1,24 @@
-from typing import Annotated, Any
-
 from contextlib import asynccontextmanager
+from typing import Annotated
 
-from fastapi import FastAPI, Request, Depends
+from fastapi import Depends, FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 
 # from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from sqlalchemy import func, select
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
+
+import models
+from config import settings
+from database import Base, engine, get_db
+from exception_handlers import register_exception_handlers
 
 # Starlette's HTTPException is imported to register a custom error handler that catches ALL HTTP errors,
 # including those raised internally by Starlette (e.g. 404 for missing routes).
 # FastAPI's HTTPException alone wouldn't catch those.
-from routers import posts, users, templating
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
-import models
-from database import Base, engine, get_db
-from exception_handlers import register_exception_handlers
+from routers import posts, templating, users
 
 
 # live span
@@ -54,17 +55,29 @@ app.include_router(templating.router, prefix="", tags=["templating"])
 ## home
 @app.get("/", include_in_schema=False, name="home")
 @app.get("/posts", include_in_schema=False, name="posts")
-async def home(request: Request, db: Annotated[AsyncSession, Depends(get_db)]) -> Any:
+async def home(request: Request, db: Annotated[AsyncSession, Depends(get_db)]):
+    count_result = await db.execute(select(func.count()).select_from(models.Post))
+    total = count_result.scalar() or 0
+
     result = await db.execute(
         select(models.Post)
         .options(selectinload(models.Post.author))
-        .order_by(models.Post.date_posted.desc()),
+        .order_by(models.Post.date_posted.desc())
+        .limit(settings.posts_per_home_page),
     )
     posts = result.scalars().all()
+
+    has_more = len(posts) < total
+
     return templates.TemplateResponse(
         request,
         "home.html",
-        {"posts": posts, "title": "Home"},
+        {
+            "posts": posts,
+            "title": "Home",
+            "limit": settings.posts_per_home_page,
+            "has_more": has_more,
+        },
     )
 
 
