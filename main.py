@@ -12,7 +12,7 @@ from sqlalchemy.orm import selectinload
 
 import models
 from config import settings
-from database import Base, engine, get_db
+from database import engine, get_db
 from exception_handlers import register_exception_handlers
 
 # Starlette's HTTPException is imported to register a custom error handler that catches ALL HTTP errors,
@@ -25,8 +25,7 @@ from routers import posts, templating, users
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     # startup
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+
     yield
 
     # Shutdown

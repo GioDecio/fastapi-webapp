@@ -58,6 +58,9 @@ class Post(Base):
         default=lambda: datetime.now(UTC),
     )
 
+    likes: Mapped[int] = mapped_column(
+        Integer, default=0, server_default="0"
+    )  # default: Python-side (ORM); server_default: database-side (SQL). Both ensure likes=0 in all insertion scenarios
     author: Mapped[User] = relationship(
         back_populates="posts"
     )  # Many to 1, back populates, allows to do post.author

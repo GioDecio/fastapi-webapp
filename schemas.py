@@ -61,6 +61,7 @@ class PostResponse(PostBase):
     # TODO: make user_id and author optional (int | None, UserResponse | None) when anonymize delete strategy is implemented
     user_id: int
     date_posted: datetime  # This will be serialised to standard ISO 8601 format
+    likes: int
     author: UserPublic  # This gets nested json
 
 
