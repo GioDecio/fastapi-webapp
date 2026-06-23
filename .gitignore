@@ -11,3 +11,4 @@ blog.db
 uv.lock
 notes/
 media/
+.DS_Store
